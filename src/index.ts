@@ -1,17 +1,21 @@
-import express, { Express, Request, Response } from 'express';
-// import { PrismaClient } from '@prisma/client';
+import express, { Express} from 'express';
+import { PrismaClient } from '@prisma/client';
 import userRouter from './v1/routes/userRoutes';
+import { errorHandler } from './middleware/errorHandler';
 
 const app: Express = express();
-// const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-//routes
 
+
+//routes
 app.use('/api/v1/user', userRouter)
 
+//Error Handler
+app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
