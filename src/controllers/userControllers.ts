@@ -46,6 +46,7 @@ export const createUser = async (
   }
 };
 
+//user Login
 export const loginUser = async (
   req: Request,
   res: Response,
@@ -89,3 +90,8 @@ export const loginUser = async (
     next(new AppError('Server error', 500));
   }
 };
+
+//User Forgot Password
+export const forgotPassword = async (req:Request, res:Response) =>{
+
+}
