@@ -10,26 +10,26 @@ export const createUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   try {
-    if (!username || !email || !password) {
-      return next(new AppError('Username, email, and password are required', 400));
+    if (!name || !email || !password) {
+      return next(new AppError('name, email, and password are required', 400));
     }
     
     const checkDuplicate = await prisma.user.findFirst({
       where: {
-        OR: [{ email }, { username },],
+        OR: [{ email }, { name },],
       },
     });
 
     if (checkDuplicate) {
-      return res.send('User already exists with this email or username');
+      return res.send('User already exists with this email or name');
     }
     console.log(' till this one')
     const newUser = await prisma.user.create({
       data: {
-        username,
+        name,
         email,
         password: hashSync(password, 10),
       },
@@ -81,7 +81,7 @@ export const loginUser = async (
       message: 'User logged in successfully',
       user: {
         id: user.id,
-        name: user.username,
+        name: user.name,
         email: user.email,
       },
       token,
@@ -106,3 +106,9 @@ export const loginUser = async (
 // // return a code to the email
 
 // }
+
+export const checkauth = (req: Request,
+  res: Response,
+  next: NextFunction) =>{
+    res.send('yes this is protected route')
+  }
