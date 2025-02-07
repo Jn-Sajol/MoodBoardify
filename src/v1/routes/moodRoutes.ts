@@ -1,10 +1,11 @@
 import express from "express";
 import { userAuth } from "../../middleware/authMiddleware";
-import { createMood } from "../../controllers/moodBoardController";
+import { createMood, moodHistoryByDate } from "../../controllers/moodBoardController";
 const moodRouter = express.Router();
 
 moodRouter.post('/createmood',userAuth, createMood)
-// moodRouter.post('/login', loginUser)
+moodRouter.get('/history/:userId/:days?', userAuth, moodHistoryByDate);
+
 // moodRouter.get('/protected',userAuth, checkauth)
 // moodRouter.post('/login', userLogin)
 
