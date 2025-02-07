@@ -1,20 +1,28 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { prisma } from "../Db/db.config";
+import { moodSchema } from "../validators/moodValidators";
+import { AppError } from "../utils/appError";
 
-interface Moods {
-  userId: number;
-  mood: string;
-}
-export const createMood = async (req: Request, res: Response) => {
-  const { userId, mood }: Moods = req.body;
-  if (!mood) return res.status(400).json({ error: "Mood is required" });
-
-  try {
-    const moodEntry = await prisma.mood.create({
-      data: { userId, mood },
-    });
-    res.json(moodEntry);
-  } catch {
-    res.status(400).json({ error: "Error saving mood" });
-  }
-};
+export const createMood = async (req: Request, res: Response, next:NextFunction) => {
+    // ✅ Validate the request body using Zod
+    const validation = moodSchema.safeParse(req.body);
+  
+    if (!validation.success) {
+      return res.status(400).json({ error: validation.error.format() });
+    }
+  
+    const { userId, mood } = validation.data;
+  
+    try {
+      const moodEntry = await prisma.mood.create({
+        data: {
+          userId,
+          mood,
+        },
+      });
+  
+      res.json(moodEntry);
+    } catch (error) {
+      next(new AppError('server error',500))
+    }
+  };

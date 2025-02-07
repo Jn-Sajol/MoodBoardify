@@ -107,6 +107,39 @@ export const loginUser = async (
 
 // }
 
+//getSingleUserWithMoods
+export const getSingleUserWithMoods = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {id} = req.params;
+
+  try {
+   
+    const user = await prisma.user.findUnique({
+      where: { id:Number(id) },
+      include:{
+        moods:true
+      }
+    });
+
+    if (!user) {
+      return next(new AppError('User not found', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User fetch in successfully',
+      user: user
+    });
+  } catch (error) {
+    next(new AppError('Server error', 500));
+  }
+};
+
+
+//check protected route
 export const checkauth = (req: Request,
   res: Response,
   next: NextFunction) =>{
