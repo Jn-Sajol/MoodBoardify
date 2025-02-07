@@ -92,6 +92,17 @@ export const loginUser = async (
 };
 
 //User Forgot Password
-export const forgotPassword = async (req:Request, res:Response) =>{
+// export const forgotPassword = async (req:Request, res:Response, next:NextFunction) =>{
+// const email = req.body;
+// const checkUser = await prisma.user.findUnique({
+//   where:{
+//     email
+//   }
+// })
+// //check user
+// if(!checkUser){
+//   return next(new AppError('user not found',404))
+// }
+// // return a code to the email
 
-}
+// }
