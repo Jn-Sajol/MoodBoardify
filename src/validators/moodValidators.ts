@@ -30,3 +30,8 @@ export const moodSchema = z.object({
   userId: z.number().int().positive(), // Must be a positive integer
   mood: z.nativeEnum(Moods), // Must be a valid enum value
 });
+
+
+export const moodRecommendationSchema = z.object({
+  mood: z.string().min(2, "Mood must be needed"),
+});
