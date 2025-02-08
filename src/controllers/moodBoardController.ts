@@ -30,16 +30,16 @@ export const createMood = async (req: Request, res: Response, next:NextFunction)
 
   // Mood History 
   export const moodHistoryByDate =  async (req: Request, res: Response) => {
-    const userId = Number(req.params.userId);
-    const daysParam = req.params.days;
-    
-    // Extract numeric value from `7d` or `30d`
-    const days = daysParam ? parseInt(daysParam) : 7;
+   const userId = Number(req.params.userId);
+  const daysParam = req.params.days;
   
-    if (isNaN(userId) || isNaN(days) || days <= 0) {
-      return res.status(400).json({ error: "Invalid parameters. User ID must be a number, and days must be a positive number." });
-    }
-  
+  // Extract numeric value from `7d` or `30d`
+  const days = daysParam ? parseInt(daysParam) : 7;
+
+  if (isNaN(userId) || isNaN(days) || days <= 0) {
+    return res.status(400).json({ error: "Invalid parameters. User ID must be a number, and days must be a positive number." });
+  }
+
     try {
       const moods = await prisma.mood.findMany({
         where: {
