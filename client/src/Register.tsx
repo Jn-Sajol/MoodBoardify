@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const [name, setUserName] = useState("");
@@ -6,6 +7,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,13 +29,12 @@ const Register = () => {
         throw new Error(data.message || "Something went wrong!");
       }
 
-      console.log("Registration Success:", data);
-      alert("Registration Successful!");
-      
+      console.log("Registration Success:", data); 
       // Reset form fields after successful registration
       setUserName("");
       setEmail("");
       setPassword("");
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     } finally {
