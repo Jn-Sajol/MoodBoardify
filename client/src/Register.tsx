@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Register = () => {
   const [name, setUserName] = useState("");
@@ -85,6 +85,7 @@ const Register = () => {
         >
           {loading ? "Registering..." : "Register"}
         </button>
+        <p>ALready Registered? Go to <Link to={'/login'}> <span className=" text-blue-900">Log In</span> </Link></p>
       </form>
     </div>
   );
