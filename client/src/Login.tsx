@@ -30,6 +30,7 @@ function Login() {
       }
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       console.log("Login Successful:", data);
       
       // Redirect to home page
