@@ -72,7 +72,7 @@ export default function RecommendationPage() {
       .finally(() => setLoading(false));
   };
 
-  if (loading) return <div className="text-center text-lg font-semibold mt-10">Loading...</div>;
+  if (loading) return <div className="text-center text-lg font-semibold mt-10">Your Ai Is Working 🚀👩🏻‍💻...</div>;
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
   return (

@@ -76,7 +76,7 @@ export default function MoodStatisticsPage() {
       });
   }, [userId, days, token]); // Fetch data when userId, days, or token change
 
-  console.log(moodData);
+  console.log('mood data getting',moodData);
 
   const getMoodColor = (mood: string) => {
     switch (mood) {
@@ -126,23 +126,31 @@ export default function MoodStatisticsPage() {
         return "#CCCCCC"; // Default color
     }
   };
-  
   const getLineChartData = () => {
-    const labels = moodData.map((entry) => entry.date);
-    const moods = Array.from(new Set(moodData.map((entry) => entry.mood)));
+    const labels = moodData.map((entry) => entry.date); // Extract unique dates
+    const moods = Array.from(new Set(moodData.flatMap((entry) => Object.keys(entry.moods)))); // Extract unique moods
+  
     const datasets = moods.map((mood) => ({
       label: mood,
-      data: moodData.map((entry) => entry.moods[mood] || 0),
+      data: labels.map((date) => {
+        const entry = moodData.find((e) => e.date === date);
+        return entry ? entry.moods[mood] || 0 : 0; // Get the mood count for each date
+      }),
       borderColor: getMoodColor(mood),
+      backgroundColor: getMoodColor(mood),
       tension: 0.1,
       fill: false,
     }));
-    console.log(labels,datasets)
+  
+    console.log("labels =", labels, "datasets =", datasets);
+  
     return {
       labels,
       datasets,
     };
   };
+  
+  
 
   const getPieChartData = () => {
     const moodCounts = moodData.reduce((acc, entry) => {
@@ -211,8 +219,32 @@ export default function MoodStatisticsPage() {
 
       <div className="flex justify-center mb-6">
         <button
-          onClick={() => setDays(7)}
+          onClick={() => setDays(1)}
           className={`cursor-pointer px-4 py-2 border rounded-lg ${
+            days === 1 ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          Last 1 Days
+        </button>
+        <button
+          onClick={() => setDays(3)}
+          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
+            days === 3 ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          Last 3 Days
+        </button>
+        <button
+          onClick={() => setDays(5)}
+          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
+            days === 5 ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          Last 5 Days
+        </button>
+        <button
+          onClick={() => setDays(7)}
+          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
             days === 7 ? "bg-blue-500 text-white" : "bg-white"
           }`}
         >

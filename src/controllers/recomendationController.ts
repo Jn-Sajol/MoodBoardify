@@ -44,20 +44,30 @@ export const recommendation = async (req: Request, res: Response) => {
   "songs": [
     { "title": "Song Name", "link": "YouTube Link", "avatar": "Image URL" }
     { "title": "Song Name", "link": "YouTube Link", "avatar": "Image URL" }
+    { "title": "Song Name", "link": "YouTube Link", "avatar": "Image URL" }
+    { "title": "Song Name", "link": "YouTube Link", "avatar": "Image URL" }
   ],
   "movies": [
+    { "title": "Movie Name", "link": "IMDB Link", "avatar": "Image URL" }
+    { "title": "Movie Name", "link": "IMDB Link", "avatar": "Image URL" }
     { "title": "Movie Name", "link": "IMDB Link", "avatar": "Image URL" }
     { "title": "Movie Name", "link": "IMDB Link", "avatar": "Image URL" }
   ],
   "books": [
     { "title": "Book Name", "link": "Goodreads Link", "avatar": "Image URL" }
     { "title": "Book Name", "link": "Goodreads Link", "avatar": "Image URL" }
+    { "title": "Book Name", "link": "Goodreads Link", "avatar": "Image URL" }
+    { "title": "Book Name", "link": "Goodreads Link", "avatar": "Image URL" }
   ],
   "quotes": [
     { "text": "Inspirational Quote", "author": "Author Name" }
     { "text": "Inspirational Quote", "author": "Author Name" }
+    { "text": "Inspirational Quote", "author": "Author Name" }
+    { "text": "Inspirational Quote", "author": "Author Name" }
   ],
   "activities": [
+    { "title": "Activity Name", "link": "Related Link", "avatar": "Image URL" }
+    { "title": "Activity Name", "link": "Related Link", "avatar": "Image URL" }
     { "title": "Activity Name", "link": "Related Link", "avatar": "Image URL" }
     { "title": "Activity Name", "link": "Related Link", "avatar": "Image URL" }
   ]
@@ -65,7 +75,7 @@ export const recommendation = async (req: Request, res: Response) => {
         },
       ],
       response_format: { type: "json_object" },
-      max_tokens: 1000,
+      max_tokens: 2000,
     });
 
     const content = response.choices[0].message.content;
