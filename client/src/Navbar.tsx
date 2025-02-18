@@ -38,7 +38,7 @@ const NavBar = () => {
           </NavLink>
           <NavLink
             className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
-            to="/statistic/:userId"
+            to="/statistic"
           >
             Stats
           </NavLink>
