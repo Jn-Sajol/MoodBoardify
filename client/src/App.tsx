@@ -7,6 +7,7 @@ import CreateMood from "./CreateMood";
 import NavBar from "./Navbar";
 import Dashboard from "./Dashboard";
 import Recommendation from "./Recommendation";
+import MoodStatisticsPage from "./Statistics";
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<Dashboard/>} />
           <Route path="/moods" element={<CreateMood />} />
           <Route path="/recommendation" element={<Recommendation />} />
+          <Route path="/statistic/:userId" element={<MoodStatisticsPage />} />
         </Route>
       </Routes>
     </>

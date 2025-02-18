@@ -101,7 +101,7 @@ export default function RecommendationPage() {
       <div className="mt-6 text-center">
         <button
           onClick={handleGetAnotherRecommendation}
-          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+          className=" cursor-pointer bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
         >
           Get Another Recommendation
         </button>

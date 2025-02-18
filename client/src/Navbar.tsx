@@ -23,9 +23,9 @@ const NavBar = () => {
         <div className="flex flex-row justify-center  gap-12 bg-gray-700 text-orange-600">
           <NavLink
             className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
-            to="/dashboard"
+            to="/homepage"
           >
-            Dashboard
+            Homepage
           </NavLink>
         </div>
 
@@ -38,7 +38,7 @@ const NavBar = () => {
           </NavLink>
           <NavLink
             className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
-            to="/wishlist"
+            to="/statistic/:userId"
           >
             Stats
           </NavLink>
