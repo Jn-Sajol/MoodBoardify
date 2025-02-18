@@ -15,11 +15,19 @@ export default function RecommendationPage() {
   const [recommendations, setRecommendations] = useState<Recommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  console.log(mood)
 
   useEffect(() => {
     if (!mood) return;
-    
-    fetch(`http://localhost:3000/mood/recommendation?mood=${mood}`)
+
+    // Making a POST request
+    fetch("http://localhost:3000/api/v1/mood/recommendation", {
+      method: "POST", // Change to POST
+      headers: {
+        "Content-Type": "application/json", // Set correct Content-Type header
+      },
+      body: JSON.stringify({ mood }), // Sending mood in the body as JSON
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.recommendations) {
@@ -44,7 +52,7 @@ export default function RecommendationPage() {
           <RecommendationSection title="Songs" items={recommendations.songs} />
           <RecommendationSection title="Movies" items={recommendations.movies} />
           <RecommendationSection title="Books" items={recommendations.books} />
-          
+
           <div className="bg-gray-100 p-4 rounded-lg shadow">
             <h3 className="text-xl font-semibold mb-3">Quotes</h3>
             {recommendations.quotes.map((quote, index) => (

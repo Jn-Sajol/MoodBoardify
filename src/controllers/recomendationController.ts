@@ -20,8 +20,7 @@ const openai = new OpenAI({
 // };
 
 export const recommendation = async (req: Request, res: Response) => {
-  const moodFromQuery = req.query.mood;
-  const validation = moodRecommendationSchema.safeParse({mood:moodFromQuery});
+  const validation = moodRecommendationSchema.safeParse(req.body);
   if (!validation.success) {
     return res
       .status(400)
