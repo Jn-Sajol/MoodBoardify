@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -70,12 +70,13 @@ function Login() {
         <button
           type="submit"
           className={`p-2 rounded-md w-full ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-teal-800 to-teal-600 text-white hover:bg-green-600 cursor-pointer"
           } text-white font-semibold`}
           disabled={loading}
         >
           {loading ? "Logging in..." : "Submit"}
         </button>
+        <p>Not Register yet? <span className=" text-cyan-800"><Link to={'/register'}>Register here</Link></span></p>
       </form>
     </div>
   );

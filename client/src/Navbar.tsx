@@ -18,31 +18,31 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-between gap-12 p-6 bg-gray-700 text-orange-600">
+      <div className="flex justify-between items-center bg-gradient-to-r from-teal-800 to-teal-600 p-6 text-white">
         <div className="flex flex-row justify-center gap-12">
           <NavLink
-            className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
-            to="/homepage"
+            className="text-2xl font-semibold hover:text-teal-200 transition-all rounded-lg"
+            to="/"
           >
-            Homepage
+            MoodBoardiFy
           </NavLink>
         </div>
 
         <div className="flex flex-row justify-center gap-12">
           <NavLink
-            className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
+            className="text-2xl font-semibold hover:text-teal-200 transition-all p-1 rounded-lg"
             to="/moods"
           >
             Create Mood
           </NavLink>
           <NavLink
-            className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
+            className="text-2xl font-semibold hover:text-teal-200 transition-all p-1 rounded-lg"
             to="/statistic"
           >
-            Stats
+            Mood Statistics
           </NavLink>
           <button
-            className="bg-orange-800 text-white p-1 rounded-lg cursor-pointer"
+            className=" text-2xl bg-teal-800 hover:text-teal-200 text-white p-1 rounded-lg cursor-pointer"
             onClick={handleLogout}
           >
             Logout

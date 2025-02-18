@@ -15,8 +15,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route element={<NavBar />}>
-          <Route index element={<Dashboard/>} />
-          <Route path="/homepage" element={<Homepage />} />
+          <Route index element={<Homepage/>} />
+          {/* <Route path="/homepage" element={<Homepage />} /> */}
           <Route path="/moods" element={<CreateMood />} />
           <Route path="/recommendation" element={<Recommendation />} />
           <Route path="/statistic" element={<MoodStatisticsPage />} />
