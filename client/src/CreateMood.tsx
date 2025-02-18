@@ -35,17 +35,16 @@ const CreateMood = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
-  
+
     console.log("Stored User:", storedUser);
     console.log("Stored Token:", storedToken);
-  
+
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       console.log("Parsed User ID:", parsedUser.id);
       setUserId(parsedUser.id);
     }
   }, []);
-  
 
   // const handleMoodClick = async (mood) => {
   //   setError(null);
@@ -82,22 +81,22 @@ const CreateMood = () => {
   const handleMoodClick = async (mood) => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-    
+
     if (!storedUser || !token) {
       setError("User not authenticated.");
       return;
     }
-  
+
     const parsedUser = JSON.parse(storedUser);
     if (!parsedUser?.id) {
       setError("User ID not found.");
       return;
     }
-  
+
     setUserId(parsedUser.id); // Ensure userId is set
     setError(null);
     setResponse(null);
-  
+
     try {
       const res = await fetch("http://localhost:3000/api/v1/mood/createmood", {
         method: "POST",
@@ -107,35 +106,34 @@ const CreateMood = () => {
         },
         body: JSON.stringify({ userId: parsedUser.id, mood }),
       });
-  
+
       const data = await res.json();
-  
+
       if (!res.ok) {
         throw new Error(data.error || "Failed to create mood");
       }
-  
+
       setResponse(`Mood "${mood}" created successfully!`);
-      navigate(`/recommendation?mood=${mood}`)
-      
+      navigate(`/recommendation?mood=${mood}`);
     } catch (err) {
       setError(err.message);
     }
   };
-  
+
   return (
     <div className="flex flex-col items-center mt-16 gap-6">
       <h2 className="text-2xl font-bold">How are you feeling today?</h2>
 
       {/* Mood Cards */}
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
         {moods.map(({ name, emoji }) => (
           <button
             key={name}
             onClick={() => handleMoodClick(name)}
-            className=" cursor-pointer flex flex-col items-center justify-center w-24 h-24 bg-gray-100 border rounded-lg shadow-md hover:bg-gray-500 transition p-2"
+            className="cursor-pointer flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 border rounded-lg shadow-md bg-gradient-to-r from-teal-800 to-teal-600 hover:bg-gray-100 transition-all transform hover:scale-105 duration-300 p-2 text-white"
           >
-            <span className="text-3xl">{emoji}</span>
-            <span className="text-sm font-semibold">{name}</span>
+            <span className="text-4xl md:text-5xl lg:text-6xl">{emoji}</span>
+            <span className="text-sm font-semibold mt-4">{name}</span>
           </button>
         ))}
       </div>

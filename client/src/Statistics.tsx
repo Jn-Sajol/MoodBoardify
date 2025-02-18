@@ -221,7 +221,7 @@ export default function MoodStatisticsPage() {
         <button
           onClick={() => setDays(1)}
           className={`cursor-pointer px-4 py-2 border rounded-lg ${
-            days === 1 ? "bg-blue-500 text-white" : "bg-white"
+            days === 1 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
           }`}
         >
           Last 1 Days
@@ -229,7 +229,7 @@ export default function MoodStatisticsPage() {
         <button
           onClick={() => setDays(3)}
           className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 3 ? "bg-blue-500 text-white" : "bg-white"
+            days === 3 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
           }`}
         >
           Last 3 Days
@@ -237,7 +237,7 @@ export default function MoodStatisticsPage() {
         <button
           onClick={() => setDays(5)}
           className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 5 ? "bg-blue-500 text-white" : "bg-white"
+            days === 5 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
           }`}
         >
           Last 5 Days
@@ -245,7 +245,7 @@ export default function MoodStatisticsPage() {
         <button
           onClick={() => setDays(7)}
           className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 7 ? "bg-blue-500 text-white" : "bg-white"
+            days === 7 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
           }`}
         >
           Last 7 Days
@@ -254,7 +254,7 @@ export default function MoodStatisticsPage() {
         <button
           onClick={() => setDays(30)}
           className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 30 ? "bg-blue-500 text-white" : "bg-white"
+            days === 30 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
           }`}
         >
           Last 30 Days
