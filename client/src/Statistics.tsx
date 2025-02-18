@@ -1,9 +1,30 @@
 import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  ChartDataLabels
+);
 
 interface MoodData {
   date: string;
@@ -15,7 +36,7 @@ export default function MoodStatisticsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [days, setDays] = useState(7); // Default to last 7 days
-  
+
   // Get userId and token from localStorage
   const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
@@ -38,10 +59,10 @@ export default function MoodStatisticsPage() {
     if (!userId || !token) return;
 
     fetch(`http://localhost:3000/api/v1/mood/history/${userId}/${days}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`, // Use token directly from localStorage
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Use token directly from localStorage
+        "Content-Type": "application/json",
       },
     })
       .then((res) => res.json())
@@ -74,6 +95,25 @@ export default function MoodStatisticsPage() {
     };
   };
 
+  const getMoodColor = (mood: string) => {
+    switch (mood) {
+      case "SHY":
+        return "#ffb3b3";
+      case "SCARED":
+        return "#ff6666";
+      case "ENERGETIC":
+        return "#66ff66";
+      case "LOVE":
+        return "#ff3399";
+      case "GUILTY":
+        return "#cccc00";
+      case "SAD":
+        return "#6666ff";
+      default:
+        return "#cccccc";
+    }
+  };
+
   const getPieChartData = () => {
     const moodCounts = moodData.reduce((acc, entry) => {
       Object.keys(entry.moods).forEach((mood) => {
@@ -93,39 +133,92 @@ export default function MoodStatisticsPage() {
     };
   };
 
-  const getMoodColor = (mood: string) => {
-    switch (mood) {
-      case "SHY": return "#ffb3b3";
-      case "SCARED": return "#ff6666";
-      case "ENERGETIC": return "#66ff66";
-      case "LOVE": return "#ff3399";
-      case "GUILTY": return "#cccc00";
-      case "SAD": return "#6666ff";
-      default: return "#cccccc";
-    }
+  // Pie chart options
+  const pieChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Mood Distribution',
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => {
+            const total = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0);
+            const percentage = ((tooltipItem.raw / total) * 100).toFixed(2);
+            return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
+          },
+        },
+      },
+      datalabels: {
+        display: true,
+        color: 'white',  // Set label color to white or any color you prefer
+        formatter: (value, ctx) => {
+          const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
+          const percentage = ((value / total) * 100).toFixed(2);
+          return `${percentage}%`;  // Display percentage
+        },
+        font: {
+          weight: 'bold',
+          size: 14,
+        },
+        anchor: 'center',  // Position of label inside the slice
+        align: 'center',  // Align text to the center of the slice
+      },
+    },
   };
-
+    
+  
+  
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-center mb-6">Mood History for User {userId}</h2>
+      <h2 className="text-3xl font-bold text-center mb-6">
+        Mood History
+      </h2>
 
       <div className="flex justify-center mb-6">
-        <button onClick={() => setDays(7)} className="px-4 py-2 border rounded-lg">Last 7 Days</button>
-        <button onClick={() => setDays(30)} className="px-4 py-2 ml-2 border rounded-lg">Last 30 Days</button>
+        <button
+          onClick={() => setDays(7)}
+          className={`cursor-pointer px-4 py-2 border rounded-lg ${
+            days === 7 ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          Last 7 Days
+        </button>
+
+        <button
+          onClick={() => setDays(30)}
+          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
+            days === 30 ? "bg-blue-500 text-white" : "bg-white"
+          }`}
+        >
+          Last 30 Days
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-4">Mood Over Time</h3>
-          <Line data={getLineChartData()} options={{ responsive: true, plugins: { title: { display: true, text: "Mood Swings Over Time" } } }} />
+          <Line
+            data={getLineChartData()}
+            options={{
+              responsive: true,
+              plugins: {
+                title: { display: true, text: "Mood Swings Over Time" },
+              },
+            }}
+          />
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-4">Mood Distribution</h3>
-          <Pie data={getPieChartData()} options={{ responsive: true, plugins: { title: { display: true, text: "Mood Distribution" } } }} />
+          <Pie
+            data={getPieChartData()}
+            options={pieChartOptions} // Apply options to show percentage
+          />
         </div>
       </div>
     </div>
