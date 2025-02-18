@@ -15,30 +15,62 @@ export default function RecommendationPage() {
   const [recommendations, setRecommendations] = useState<Recommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  console.log(mood)
 
   useEffect(() => {
     if (!mood) return;
 
-    // Making a POST request
+    // Check if recommendations are already cached in localStorage
+    const cachedRecommendations = localStorage.getItem(`recommendations-${mood}`);
+    if (cachedRecommendations) {
+      setRecommendations(JSON.parse(cachedRecommendations));
+      setLoading(false); // No need to load if cached data is found
+    } else {
+      // Fetch recommendations from the backend if not cached
+      fetch("http://localhost:3000/api/v1/mood/recommendation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mood }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.recommendations) {
+            setRecommendations(data.recommendations);
+            localStorage.setItem(`recommendations-${mood}`, JSON.stringify(data.recommendations)); // Cache the data
+          } else {
+            setError("No recommendations found.");
+          }
+        })
+        .catch(() => setError("Failed to fetch recommendations."))
+        .finally(() => setLoading(false));
+    }
+  }, [mood]);
+
+  const handleGetAnotherRecommendation = () => {
+    setLoading(true);
+    setRecommendations(null);
+    setError("");
+    // Fetch fresh recommendations from the backend
     fetch("http://localhost:3000/api/v1/mood/recommendation", {
-      method: "POST", // Change to POST
+      method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set correct Content-Type header
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ mood }), // Sending mood in the body as JSON
+      body: JSON.stringify({ mood }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.recommendations) {
           setRecommendations(data.recommendations);
+          localStorage.setItem(`recommendations-${mood}`, JSON.stringify(data.recommendations)); // Cache the new data
         } else {
           setError("No recommendations found.");
         }
       })
       .catch(() => setError("Failed to fetch recommendations."))
       .finally(() => setLoading(false));
-  }, [mood]);
+  };
 
   if (loading) return <div className="text-center text-lg font-semibold mt-10">Loading...</div>;
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
@@ -65,6 +97,15 @@ export default function RecommendationPage() {
           <RecommendationSection title="Activities" items={recommendations.activities} />
         </div>
       )}
+
+      <div className="mt-6 text-center">
+        <button
+          onClick={handleGetAnotherRecommendation}
+          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+        >
+          Get Another Recommendation
+        </button>
+      </div>
     </div>
   );
 }
