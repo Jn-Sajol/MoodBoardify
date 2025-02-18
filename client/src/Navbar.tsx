@@ -3,24 +3,23 @@ import { NavLink, Outlet, useNavigate } from "react-router";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("token"); // Check if token exists
 
   useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
-    if (!isAuthenticated) {
+    const token = localStorage.getItem("token"); // Get fresh token value
+    if (!token) {
       navigate("/register");
     }
-  }, [isAuthenticated]);
+  }, []); // Run only once on mount
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem("token"); // Remove token
+    navigate("/login"); // Redirect to login page
   };
 
   return (
     <>
       <div className="flex flex-row justify-between gap-12 p-6 bg-gray-700 text-orange-600">
-        <div className="flex flex-row justify-center  gap-12 bg-gray-700 text-orange-600">
+        <div className="flex flex-row justify-center gap-12">
           <NavLink
             className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
             to="/homepage"
@@ -29,7 +28,7 @@ const NavBar = () => {
           </NavLink>
         </div>
 
-        <div className="flex flex-row justify-center   gap-12 bg-gray-700 text-orange-600">
+        <div className="flex flex-row justify-center gap-12">
           <NavLink
             className="hover:bg-orange-600 hover:text-white p-1 rounded-lg"
             to="/moods"
@@ -42,12 +41,12 @@ const NavBar = () => {
           >
             Stats
           </NavLink>
-          <NavLink
-            className="bg-orange-800 text-white p-1 rounded-lg"
+          <button
+            className="bg-orange-800 text-white p-1 rounded-lg cursor-pointer"
             onClick={handleLogout}
           >
             Logout
-          </NavLink>
+          </button>
         </div>
       </div>
       <Outlet />
