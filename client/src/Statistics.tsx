@@ -78,9 +78,58 @@ export default function MoodStatisticsPage() {
 
   console.log(moodData);
 
+  const getMoodColor = (mood: string) => {
+    switch (mood) {
+      case "HAPPY":
+        return "#FFD700";
+      case "SAD":
+        return "#6666FF";
+      case "ANGRY":
+        return "#FF0000";
+      case "EXCITED":
+        return "#FF4500";
+      case "CALM":
+        return "#00CED1";
+      case "ANXIOUS":
+        return "#FF8C00";
+      case "NERVOUS":
+        return "#FF6347";
+      case "RELAXED":
+        return "#98FB98";
+      case "CONFIDENT":
+        return "#1E90FF";
+      case "FRUSTRATED":
+        return "#8B0000";
+      case "BORED":
+        return "#A9A9A9";
+      case "HOPEFUL":
+        return "#32CD32";
+      case "GRATEFUL":
+        return "#FFA500";
+      case "LONELY":
+        return "#4B0082";
+      case "TIRED":
+        return "#708090";
+      case "ENERGETIC":
+        return "#66FF66";
+      case "CURIOUS":
+        return "#DAA520";
+      case "SCARED":
+        return "#FF6666";
+      case "LOVE":
+        return "#FF3399";
+      case "GUILTY":
+        return "#CCCC00";
+      case "SHY":
+        return "#FFB3B3";
+      default:
+        return "#CCCCCC"; // Default color
+    }
+  };
+  
   const getLineChartData = () => {
     const labels = moodData.map((entry) => entry.date);
-    const moods = ["SHY", "SCARED", "ENERGETIC", "LOVE", "GUILTY", "SAD"]; // List of moods
+    const moods = Array.from(new Set(moodData.map((entry) => entry.mood)));
     const datasets = moods.map((mood) => ({
       label: mood,
       data: moodData.map((entry) => entry.moods[mood] || 0),
@@ -88,30 +137,11 @@ export default function MoodStatisticsPage() {
       tension: 0.1,
       fill: false,
     }));
-
+    console.log(labels,datasets)
     return {
       labels,
       datasets,
     };
-  };
-
-  const getMoodColor = (mood: string) => {
-    switch (mood) {
-      case "SHY":
-        return "#ffb3b3";
-      case "SCARED":
-        return "#ff6666";
-      case "ENERGETIC":
-        return "#66ff66";
-      case "LOVE":
-        return "#ff3399";
-      case "GUILTY":
-        return "#cccc00";
-      case "SAD":
-        return "#6666ff";
-      default:
-        return "#cccccc";
-    }
   };
 
   const getPieChartData = () => {
