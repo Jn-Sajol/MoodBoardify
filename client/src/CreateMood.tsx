@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const moods = [
   { name: "HAPPY", emoji: "😊" },
@@ -28,6 +29,7 @@ const CreateMood = () => {
   const [userId, setUserId] = useState(null);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // ✅ Fetch userId from localStorage or auth context
   useEffect(() => {
@@ -113,6 +115,8 @@ const CreateMood = () => {
       }
   
       setResponse(`Mood "${mood}" created successfully!`);
+      navigate(`/recommendation?mood=${mood}`)
+      
     } catch (err) {
       setError(err.message);
     }

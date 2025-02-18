@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router";
 import CreateMood from "./CreateMood";
 import NavBar from "./Navbar";
 import Dashboard from "./Dashboard";
+import Recommendation from "./Recommendation";
 function App() {
   return (
     <>
@@ -16,6 +17,7 @@ function App() {
         <Route element={<NavBar />}>
           <Route index element={<Dashboard/>} />
           <Route path="/moods" element={<CreateMood />} />
+          <Route path="/recommendation" element={<Recommendation />} />
         </Route>
       </Routes>
     </>

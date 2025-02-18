@@ -15,7 +15,7 @@ app.use(cors())
 //routes
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/mood', moodRouter)
-app.use('/api/v1/mood/recommendation', recommendationRouter)
+app.use('/api/v1/mood', recommendationRouter)
 
 //Error Handler
 app.use(errorHandler)
