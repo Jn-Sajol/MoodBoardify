@@ -9,7 +9,7 @@ const Register = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -36,7 +36,11 @@ const Register = () => {
       setPassword("");
       navigate("/login");
     } catch (err) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message as any);
+      } else {
+        setError("An unknown error occurred" as any);
+      }
     } finally {
       setLoading(false);
     }

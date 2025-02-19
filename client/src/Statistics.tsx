@@ -10,6 +10,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  ChartOptions,
+  TooltipItem,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -29,6 +31,7 @@ interface MoodData {
   date: string;
   moods: { [key: string]: number };
 }
+
 
 export default function MoodStatisticsPage() {
   const [moodData, setMoodData] = useState<MoodData[]>([]);
@@ -146,18 +149,18 @@ export default function MoodStatisticsPage() {
     };
   };
 
-  const pieChartOptions = {
+  const pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: `Mood Distribution (Last ${days} Days)`,
+        text: "Mood Distribution",
       },
       tooltip: {
         callbacks: {
-          label: (tooltipItem) => {
-            const total = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0);
-            const percentage = ((tooltipItem.raw / total) * 100).toFixed(2);
+          label: (tooltipItem: TooltipItem<'pie'>) => {
+            const total = tooltipItem.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
+            const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(2);
             return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
           },
         },
@@ -165,14 +168,14 @@ export default function MoodStatisticsPage() {
       datalabels: {
         display: true,
         color: "white",
-        formatter: (value, ctx) => {
-          const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
+        formatter: (value: number, ctx: any) => {
+          const total = ctx.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
           const percentage = ((value / total) * 100).toFixed(2);
           return `${percentage}%`;
         },
         font: {
-          weight: "bold",
-          size: 14,
+          weight: 'bold' as const,
+          size: 12
         },
       },
     },

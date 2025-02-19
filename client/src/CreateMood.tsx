@@ -26,9 +26,9 @@ const moods = [
 ];
 
 const CreateMood = () => {
-  const [userId, setUserId] = useState(null);
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
+  const [_, setUserId] = useState<number | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,39 +45,7 @@ const CreateMood = () => {
     }
   }, []);
 
-  // const handleMoodClick = async (mood) => {
-  //   setError(null);
-  //   setResponse(null);
-
-  //   const token = localStorage.getItem("token");
-  //   if (!token || !userId) {
-  //     setError("User not authenticated.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await fetch("http://localhost:3000/api/v1/mood/createmood", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({ userId, mood }),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       throw new Error(data.error || "Failed to create mood");
-  //     }
-
-  //     setResponse(`Mood "${mood}" created successfully!`);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
-
-  const handleMoodClick = async (mood) => {
+  const handleMoodClick = async (mood: string) => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
@@ -92,7 +60,7 @@ const CreateMood = () => {
       return;
     }
 
-    setUserId(parsedUser.id); // Ensure userId is set
+    setUserId(parsedUser.id);
     setError(null);
     setResponse(null);
 
@@ -115,7 +83,11 @@ const CreateMood = () => {
       setResponse(`Mood "${mood}" created successfully!`);
       navigate(`/recommendation?mood=${mood}`);
     } catch (err) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   };
 

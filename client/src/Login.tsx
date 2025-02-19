@@ -9,7 +9,7 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -37,7 +37,11 @@ function Login() {
       // Redirect to home page
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message as any);
+      } else {
+        setError("An unknown error occurred" as any);
+      }
     } finally {
       setLoading(false);
     }
