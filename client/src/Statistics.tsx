@@ -196,27 +196,33 @@ export default function MoodStatisticsPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {days > 1 && getLineChartData() && (
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-4">Mood Over Time</h3>
-            <Line
-              data={getLineChartData()!}
-              options={{
-                responsive: true,
-                plugins: { title: { display: true, text: "Mood Trends" } },
-              }}
-            />
-          </div>
-        )}
-
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">
-            Mood Distribution (Last {days} Days)
-          </h3>
-          <Pie data={getPieChartData()} options={pieChartOptions} />
+      {moodData.length === 0 ? (
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
+          <h3 className="text-xl font-semibold">No mood data created yet</h3>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {days > 1 && getLineChartData() && (
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4">Mood Over Time</h3>
+              <Line
+                data={getLineChartData()!}
+                options={{
+                  responsive: true,
+                  plugins: { title: { display: true, text: "Mood Trends" } },
+                }}
+              />
+            </div>
+          )}
+
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-4">
+              Mood Distribution (Last {days} Days)
+            </h3>
+            <Pie data={getPieChartData()} options={pieChartOptions} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
