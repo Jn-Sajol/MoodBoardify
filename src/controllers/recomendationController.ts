@@ -1,9 +1,19 @@
 import { Request, Response } from "express";
 import OpenAI from "openai";
 import { moodRecommendationSchema } from "../validators/moodValidators";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
+
+// Verify API key is available
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  throw new Error("OPENAI_API_KEY is not defined in environment variables");
+}
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: apiKey,
 });
 
 // const moodDatabase: Record<string, any> = {
@@ -22,9 +32,10 @@ const openai = new OpenAI({
 export const recommendation = async (req: Request, res: Response) => {
   const validation = moodRecommendationSchema.safeParse(req.body);
   if (!validation.success) {
-    return res
+    res
       .status(400)
       .json({ error: "Invalid input", details: validation.error.errors });
+    return;
   }
 
   const { mood } = validation.data;
@@ -80,17 +91,20 @@ export const recommendation = async (req: Request, res: Response) => {
 
     const content = response.choices[0].message.content;
     if (!content) {
-      return res.status(500).json({ error: "AI response is empty." });
+      res.status(500).json({ error: "AI response is empty." });
+      return;
     }
 
     let aiResponse;
     try {
       aiResponse = JSON.parse(content);
     } catch (error) {
-      return res.status(500).json({ error: "Failed to parse AI response." });
+      res.status(500).json({ error: "Failed to parse AI response." });
+      return;
     }
 
     res.json({ mood, recommendations: aiResponse });
+    return;
   } catch (error: any) {
     console.error("Error details:", error);
     res
