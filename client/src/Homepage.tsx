@@ -12,7 +12,8 @@ export default function Homepage() {
           Whether you're feeling happy, sad, or anything in between, we have the perfect music, movies, books, and activities for you!
         </p>
         <Link to="/moods">
-          <button className="bg-gradient-to-r from-teal-800 to-teal-600 p-6 text-white p-3 rounded-lg hover:bg-blue-600">
+          <button className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
+  hover:from-blue-800 hover:to-blue-600">
             Get Started
           </button>
         </Link>
@@ -73,7 +74,8 @@ function FeatureCard({ icon, title, description }: { icon: string; title: string
 function MoodButton({ mood }: { mood: string }) {
   return (
     <Link to={`/recommendation?mood=${mood.toLowerCase()}`}>
-      <button className="bg-gradient-to-r from-teal-800 to-teal-600 p-6 text-white p-4 rounded-lg hover:bg-blue-600">
+      <button className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
+  hover:from-blue-800 hover:to-blue-600">
         {mood}
       </button>
     </Link>

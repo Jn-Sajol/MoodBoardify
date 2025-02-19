@@ -31,7 +31,6 @@ const CreateMood = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Fetch userId from localStorage or auth context
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");

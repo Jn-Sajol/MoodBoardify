@@ -31,6 +31,7 @@ function Login() {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("auth", "true");
       console.log("Login Successful:", data);
       
       // Redirect to home page

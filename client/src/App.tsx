@@ -5,9 +5,9 @@ import Homepage from "./Homepage";
 import { Route, Routes } from "react-router";
 import CreateMood from "./CreateMood";
 import NavBar from "./Navbar";
-import Dashboard from "./Dashboard";
 import Recommendation from "./Recommendation";
 import MoodStatisticsPage from "./Statistics";
+import ProtectedRoute from "./ProtectedRoute";
 function App() {
   return (
     <>
@@ -15,11 +15,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route element={<NavBar />}>
-          <Route index element={<Homepage/>} />
-          {/* <Route path="/homepage" element={<Homepage />} /> */}
-          <Route path="/moods" element={<CreateMood />} />
-          <Route path="/recommendation" element={<Recommendation />} />
-          <Route path="/statistic" element={<MoodStatisticsPage />} />
+          <Route index element={<Homepage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/moods" element={<CreateMood />} />
+            <Route path="/recommendation" element={<Recommendation />} />
+            <Route path="/statistic" element={<MoodStatisticsPage />} />
+          </Route>
         </Route>
       </Routes>
     </>

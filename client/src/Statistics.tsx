@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import { Pie } from "react-chartjs-2";
+import { Line, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,7 +11,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(
   CategoryScale,
@@ -35,149 +34,124 @@ export default function MoodStatisticsPage() {
   const [moodData, setMoodData] = useState<MoodData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [days, setDays] = useState(7); // Default to last 7 days
-
-  // Get userId and token from localStorage
-  const token = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
-
-  // Check if user is authenticated
-  if (!storedUser || !token) {
-    setError("User not authenticated.");
-    return <div>{error}</div>; // Return early if user is not authenticated
-  }
-
-  const parsedUser = JSON.parse(storedUser);
-  if (!parsedUser?.id) {
-    setError("User ID not found.");
-    return <div>{error}</div>; // Return early if user ID is not found
-  }
-
-  const userId = parsedUser.id;
+  const [days, setDays] = useState(7);
 
   useEffect(() => {
-    if (!userId || !token) return;
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (!storedUser || !token) {
+      setError("User not authenticated.");
+      setLoading(false);
+      return;
+    }
+
+    const parsedUser = JSON.parse(storedUser);
+    if (!parsedUser?.id) {
+      setError("User ID not found.");
+      setLoading(false);
+      return;
+    }
+
+    const userId = parsedUser.id;
 
     fetch(`http://localhost:3000/api/v1/mood/history/${userId}/${days}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`, // Use token directly from localStorage
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        setMoodData(data);
+        setMoodData(data); // Store full array of mood data
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Failed to fetch mood data");
         setLoading(false);
       });
-  }, [userId, days, token]); // Fetch data when userId, days, or token change
+  }, [days]);
 
-  console.log('mood data getting',moodData);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
+  // Generate colors for moods
   const getMoodColor = (mood: string) => {
-    switch (mood) {
-      case "HAPPY":
-        return "#FFD700";
-      case "SAD":
-        return "#6666FF";
-      case "ANGRY":
-        return "#FF0000";
-      case "EXCITED":
-        return "#FF4500";
-      case "CALM":
-        return "#00CED1";
-      case "ANXIOUS":
-        return "#FF8C00";
-      case "NERVOUS":
-        return "#FF6347";
-      case "RELAXED":
-        return "#98FB98";
-      case "CONFIDENT":
-        return "#1E90FF";
-      case "FRUSTRATED":
-        return "#8B0000";
-      case "BORED":
-        return "#A9A9A9";
-      case "HOPEFUL":
-        return "#32CD32";
-      case "GRATEFUL":
-        return "#FFA500";
-      case "LONELY":
-        return "#4B0082";
-      case "TIRED":
-        return "#708090";
-      case "ENERGETIC":
-        return "#66FF66";
-      case "CURIOUS":
-        return "#DAA520";
-      case "SCARED":
-        return "#FF6666";
-      case "LOVE":
-        return "#FF3399";
-      case "GUILTY":
-        return "#CCCC00";
-      case "SHY":
-        return "#FFB3B3";
-      default:
-        return "#CCCCCC"; // Default color
-    }
+    const moodColors: { [key: string]: string } = {
+      HAPPY: "#FFD700",
+      SAD: "#6666FF",
+      ANGRY: "#FF0000",
+      EXCITED: "#FF4500",
+      CALM: "#00CED1",
+      ANXIOUS: "#FF8C00",
+      NERVOUS: "#FF6347",
+      RELAXED: "#98FB98",
+      CONFIDENT: "#1E90FF",
+      FRUSTRATED: "#8B0000",
+      BORED: "#A9A9A9",
+      HOPEFUL: "#32CD32",
+      GRATEFUL: "#FFA500",
+      LONELY: "#4B0082",
+      TIRED: "#708090",
+      ENERGETIC: "#66FF66",
+      CURIOUS: "#DAA520",
+      SCARED: "#FF6666",
+      LOVE: "#FF3399",
+      GUILTY: "#CCCC00",
+      SHY: "#FFB3B3",
+    };
+    return moodColors[mood] || "#CCCCCC";
   };
+
+  // Process Line Chart Data (Fixing Multi-Day Processing)
   const getLineChartData = () => {
-    const labels = moodData.map((entry) => entry.date); // Extract unique dates
-    const moods = Array.from(new Set(moodData.flatMap((entry) => Object.keys(entry.moods)))); // Extract unique moods
-  
-    const datasets = moods.map((mood) => ({
+    if (moodData.length === 0) return null;
+
+    const labels = moodData.map((entry) => entry.date); // X-axis = Dates
+    const moodNames = Array.from(
+      new Set(moodData.flatMap((entry) => Object.keys(entry.moods)))
+    );
+
+    const datasets = moodNames.map((mood) => ({
       label: mood,
-      data: labels.map((date) => {
-        const entry = moodData.find((e) => e.date === date);
-        return entry ? entry.moods[mood] || 0 : 0; // Get the mood count for each date
-      }),
+      data: moodData.map((entry) => entry.moods[mood] || 0), // Ensure missing values are filled with 0
       borderColor: getMoodColor(mood),
       backgroundColor: getMoodColor(mood),
       tension: 0.1,
       fill: false,
     }));
-  
-    console.log("labels =", labels, "datasets =", datasets);
-  
-    return {
-      labels,
-      datasets,
-    };
+
+    return { labels, datasets };
   };
-  
-  
 
+  // Process Pie Chart Data (Fix: Aggregate Across All Days)
   const getPieChartData = () => {
-    const moodCounts = moodData.reduce((acc, entry) => {
-      Object.keys(entry.moods).forEach((mood) => {
-        acc[mood] = (acc[mood] || 0) + entry.moods[mood];
+    const aggregatedMoods: { [key: string]: number } = {};
+
+    moodData.forEach((entry) => {
+      Object.entries(entry.moods).forEach(([mood, count]) => {
+        aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
       });
-      return acc;
-    }, {} as { [key: string]: number });
+    });
 
     return {
-      labels: Object.keys(moodCounts),
+      labels: Object.keys(aggregatedMoods),
       datasets: [
         {
-          data: Object.values(moodCounts),
-          backgroundColor: Object.keys(moodCounts).map(getMoodColor),
+          data: Object.values(aggregatedMoods),
+          backgroundColor: Object.keys(aggregatedMoods).map(getMoodColor),
         },
       ],
     };
   };
 
-  // Pie chart options
   const pieChartOptions = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: 'Mood Distribution',
+        text: `Mood Distribution (Last ${days} Days)`,
       },
       tooltip: {
         callbacks: {
@@ -190,97 +164,57 @@ export default function MoodStatisticsPage() {
       },
       datalabels: {
         display: true,
-        color: 'white',  // Set label color to white or any color you prefer
+        color: "white",
         formatter: (value, ctx) => {
           const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
           const percentage = ((value / total) * 100).toFixed(2);
-          return `${percentage}%`;  // Display percentage
+          return `${percentage}%`;
         },
         font: {
-          weight: 'bold',
+          weight: "bold",
           size: 14,
         },
-        anchor: 'center',  // Position of label inside the slice
-        align: 'center',  // Align text to the center of the slice
       },
     },
   };
-    
-  
-  
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-center mb-6">
-        Mood History
-      </h2>
+      <h2 className="text-3xl font-bold text-center mb-6">Mood History</h2>
 
-      <div className="flex justify-center mb-6">
-        <button
-          onClick={() => setDays(1)}
-          className={`cursor-pointer px-4 py-2 border rounded-lg ${
-            days === 1 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
-          }`}
-        >
-          Last 1 Days
-        </button>
-        <button
-          onClick={() => setDays(3)}
-          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 3 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
-          }`}
-        >
-          Last 3 Days
-        </button>
-        <button
-          onClick={() => setDays(5)}
-          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 5 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
-          }`}
-        >
-          Last 5 Days
-        </button>
-        <button
-          onClick={() => setDays(7)}
-          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 7 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
-          }`}
-        >
-          Last 7 Days
-        </button>
-
-        <button
-          onClick={() => setDays(30)}
-          className={`cursor-pointer px-4 py-2 ml-2 border rounded-lg ${
-            days === 30 ? "bg-gradient-to-r from-teal-800 to-teal-600 text-white" : "bg-white"
-          }`}
-        >
-          Last 30 Days
-        </button>
+      <div className="flex justify-center mb-6 gap-3">
+        {[1, 3, 5, 7, 30].map((d) => (
+          <button
+            key={d}
+            onClick={() => setDays(d)}
+            className={`px-4 py-2 border rounded-lg ${
+              days === d ? "bg-teal-700 text-white" : "bg-white"
+            }`}
+          >
+            Last {d} Days
+          </button>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">Mood Over Time</h3>
-          <Line
-            data={getLineChartData()}
-            options={{
-              responsive: true,
-              plugins: {
-                title: { display: true, text: "Mood Swings Over Time" },
-              },
-            }}
-          />
-        </div>
+        {days > 1 && getLineChartData() && (
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-4">Mood Over Time</h3>
+            <Line
+              data={getLineChartData()!}
+              options={{
+                responsive: true,
+                plugins: { title: { display: true, text: "Mood Trends" } },
+              }}
+            />
+          </div>
+        )}
 
         <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">Mood Distribution</h3>
-          <Pie
-            data={getPieChartData()}
-            options={pieChartOptions} // Apply options to show percentage
-          />
+          <h3 className="text-xl font-semibold mb-4">
+            Mood Distribution (Last {days} Days)
+          </h3>
+          <Pie data={getPieChartData()} options={pieChartOptions} />
         </div>
       </div>
     </div>
