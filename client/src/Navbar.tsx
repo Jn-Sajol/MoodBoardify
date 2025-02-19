@@ -24,7 +24,11 @@ const NavBar = () => {
       <nav className="bg-gradient-to-r from-teal-800 to-teal-600 p-6 text-white">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
-          <NavLink className="text-2xl font-semibold" to="/">
+          <NavLink
+            className="text-2xl font-bold"
+            style={{ fontFamily: "Bebas Neue, cursive" }}
+            to="/"
+          >
             MoodBoardiFy
           </NavLink>
 
