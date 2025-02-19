@@ -79,7 +79,7 @@ const Register = () => {
         <button
           type="submit"
           className={`p-2 rounded-md w-full ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-teal-800 to-teal-600 text-white hover:bg-green-600 cursor-pointer"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-teal-800 to-teal-600 text-white hover:from-blue-400 hover:to-blue-900 cursor-pointer"
           } text-white font-semibold`}
           disabled={loading}
         >

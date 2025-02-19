@@ -121,7 +121,13 @@ const CreateMood = () => {
 
   return (
     <div className="flex flex-col items-center mt-16 gap-6">
-      <h2 className="text-2xl font-bold">How are you feeling today?</h2>
+      <h2 className="text-2xl font-bold -mt-12 sm:text-xl md:text-3xl lg:text-4xl text-center">
+        How's your mood today? 😊 <br />
+      </h2>
+      <h3 className="text-lg font-medium -mt-6 mb-3.5 sm:text-base md:text-xl lg:text-2xl text-center">
+        Pick a mood that matches how you're feeling, and we'll suggest the
+        perfect song, movie, or activity to lift your spirits! 🎶🎬✨
+      </h3>
 
       {/* Mood Cards */}
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">

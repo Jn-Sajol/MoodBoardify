@@ -9,11 +9,14 @@ export default function Homepage() {
           Discover Personalized Recommendations Based on Your Mood!
         </h1>
         <p className="text-lg text-gray-600 mb-6">
-          Whether you're feeling happy, sad, or anything in between, we have the perfect music, movies, books, and activities for you!
+          Whether you're feeling happy, sad, or anything in between, we have the
+          perfect music, movies, books, and activities for you!
         </p>
         <Link to="/moods">
-          <button className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
-  hover:from-blue-800 hover:to-blue-600">
+          <button
+            className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
+  hover:from-blue-400 hover:to-blue-900 "
+          >
             Get Started
           </button>
         </Link>
@@ -54,14 +57,23 @@ export default function Homepage() {
       {/* Fun Mood Fact */}
       <section className="text-center">
         <p className="text-lg text-gray-600 mb-4">
-          Did you know? Listening to upbeat music can improve your mood in just 15 minutes!
+          Did you know? Listening to upbeat music can improve your mood in just
+          15 minutes!
         </p>
       </section>
     </div>
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: string;
+  title: string;
+  description: string;
+}) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md text-center">
       <div className="text-4xl mb-4">{icon}</div>
@@ -74,8 +86,10 @@ function FeatureCard({ icon, title, description }: { icon: string; title: string
 function MoodButton({ mood }: { mood: string }) {
   return (
     <Link to={`/recommendation?mood=${mood.toLowerCase()}`}>
-      <button className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
-  hover:from-blue-800 hover:to-blue-600">
+      <button
+        className="bg-gradient-to-r from-teal-800 to-teal-600 text-white p-4 rounded-lg cursor-pointer 
+  hover:from-blue-400 hover:to-blue-900 "
+      >
         {mood}
       </button>
     </Link>
