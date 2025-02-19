@@ -78,9 +78,16 @@ export default function RecommendationPage() {
 
   if (loading)
     return (
-      <div className="text-center text-lg font-semibold mt-10">
-        Your AI is working 🚀👩🏻‍💻...
-      </div>
+      <>
+        <div className="text-center text-lg font-semibold mt-10">
+          Wait a Minute! Your mood data is being analyzed to bring the perfect
+          recommendations 🚀👩🏻‍💻...
+        </div>
+
+        <div className="flex justify-center mt-6">
+          <div className="animate-spin rounded-full border-t-4 border-teal-600 w-16 h-16 border-solid"></div>
+        </div>
+      </>
     );
   if (error)
     return <div className="text-center text-red-500 mt-10">{error}</div>;
@@ -88,7 +95,8 @@ export default function RecommendationPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-center mb-6 capitalize">
-        {mood} Recommendations
+        You're in a {mood} mood! Let’s find something perfect to match your
+        vibe👇
       </h2>
 
       {recommendations && (
@@ -155,8 +163,7 @@ function RecommendationSection({
     songs: "https://i.postimg.cc/132R2ZTK/music-placeholder.jpg",
     movies: "https://i.postimg.cc/k4dJMv76/movie-placeholder.jpg",
     books: "https://i.postimg.cc/pdjVt6MM/book-placeholder.jpg",
-    activities:
-      "https://i.postimg.cc/hjd6ZkmN/woman-placeholder.jpg",
+    activities: "https://i.postimg.cc/hjd6ZkmN/woman-placeholder.jpg",
   };
 
   return (
@@ -169,19 +176,19 @@ function RecommendationSection({
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-3 border p-3 rounded-lg hover:bg-gray-50"
+            className="flex items-center space-x-3 border p-3 rounded-lg transition-transform transform hover:scale-105 hover:shadow-xl hover:bg-teal-600"
           >
             <img
               src={item.avatar}
               alt={item.title}
-              className="w-16 h-16 rounded-md object-cover "
+              className="w-16 h-16 rounded-md object-cover"
               onError={(e) => {
                 e.currentTarget.src =
                   defaultImages[category] ||
                   "https://i.postimg.cc/8c6bN8fX/default-placeholder.jpg";
               }}
             />
-            <span className="text-lg font-medium ms-4">{item.title}</span>
+            <span className="text-lg font-medium">{item.title}</span>
           </a>
         ))}
       </div>
