@@ -28,7 +28,7 @@ export default function RecommendationPage() {
       setRecommendations(JSON.parse(cachedRecommendations));
       setLoading(false);
     } else {
-      fetch("http://localhost:3000/api/v1/mood/recommendation", {
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/mood/recommendation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mood }),
@@ -55,7 +55,7 @@ export default function RecommendationPage() {
     setRecommendations(null);
     setError("");
 
-    fetch("http://localhost:3000/api/v1/mood/recommendation", {
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/mood/recommendation`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mood }),

@@ -15,7 +15,7 @@ const Register = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/user/register", {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

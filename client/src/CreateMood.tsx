@@ -65,7 +65,7 @@ const CreateMood = () => {
     setResponse(null);
 
     try {
-      const res = await fetch("http://localhost:3000/api/v1/mood/createmood", {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/mood/createmood`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -58,7 +58,7 @@ export default function MoodStatisticsPage() {
 
     const userId = parsedUser.id;
 
-    fetch(`http://localhost:3000/api/v1/mood/history/${userId}/${days}`, {
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/mood/history/${userId}/${days}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

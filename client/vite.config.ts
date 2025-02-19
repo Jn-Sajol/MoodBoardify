@@ -3,9 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [tailwindcss()],
-  server: {
-    proxy: {
-      "/api": "http://localhost:5000", // Adjust based on your backend port
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": import.meta.env.VITE_BASE_URL as string, // Adjust based on your backend port
+  //   },
+  // },
 });
