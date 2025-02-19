@@ -8,8 +8,11 @@ const NavBar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/register");
+  
+    // Only redirect if the user is on a protected route
+    const protectedRoutes = ["/moods", "/statistic", "/recommendation"];
+    if (!token && protectedRoutes.includes(window.location.pathname)) {
+      navigate("/login");
     }
   }, []);
 
