@@ -80,8 +80,7 @@ export default function RecommendationPage() {
     return (
       <>
         <div className="text-center text-lg font-semibold mt-10">
-          Wait a Minute! Your mood data is being analyzed to bring the perfect
-          recommendations 🚀👩🏻‍💻...
+          Wait a Moment plz! Your mood data is being analyzed to bring the perfect recommendations 🚀👩🏻‍💻
         </div>
 
         <div className="flex justify-center mt-6">
