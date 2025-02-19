@@ -168,7 +168,7 @@ function RecommendationSection({
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <h3 className="text-xl font-semibold mb-4">{title}</h3>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
         {items.map((item, index) => (
           <a
             key={index}
