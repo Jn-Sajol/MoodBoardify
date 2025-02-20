@@ -41,23 +41,29 @@ export const moodHistoryByDate = async (
   const userId = Number(req.params.userId);
   const daysParam = req.params.days;
 
-  // Extract numeric value from `7d` or `30d`
-  const days = daysParam ? parseInt(daysParam) : 7;
-
-  if (isNaN(userId) || isNaN(days) || days <= 0) {
+  // Validate userId and days
+  if (isNaN(userId) || isNaN(Number(daysParam)) || Number(daysParam) <= 0) {
     res.status(400).json({
-      error:
-        "Invalid parameters. User ID must be a number, and days must be a positive number.",
+      error: "Invalid parameters. User ID must be a number, and days must be a positive number.",
     });
     return;
   }
 
+  const days = Number(daysParam);
+
   try {
+    // ✅ Calculate start date based on `days` parameter
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Start of today
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - (days - 1)); // Go back `days-1` to include today
+
     const moods = await prisma.mood.findMany({
       where: {
         userId,
         timestamp: {
-          gte: new Date(new Date().getTime() - days * 24 * 60 * 60 * 1000),
+          gte: startDate, // Start from `days` ago
+          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // End at today 23:59
         },
       },
       orderBy: { timestamp: "asc" },
@@ -91,3 +97,5 @@ export const moodHistoryByDate = async (
     next(new AppError("Error fetching moods", 500));
   }
 };
+
+

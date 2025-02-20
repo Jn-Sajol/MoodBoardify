@@ -38,7 +38,7 @@ export default function MoodStatisticsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [days, setDays] = useState(7);
-
+  // console.log(moodData)
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -129,15 +129,38 @@ export default function MoodStatisticsPage() {
   };
 
   // Process Pie Chart Data (Fix: Aggregate Across All Days)
+  // const getPieChartData = () => {
+  //   const aggregatedMoods: { [key: string]: number } = {};
+  
+  //   moodData.forEach((entry) => {
+  //     Object.entries(entry.moods).forEach(([mood, count]) => {
+  //       aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
+  //     });
+  //   });
+
+  //   return {
+  //     labels: Object.keys(aggregatedMoods),
+  //     datasets: [
+  //       {
+  //         data: Object.values(aggregatedMoods),
+  //         backgroundColor: Object.keys(aggregatedMoods).map(getMoodColor),
+  //       },
+  //     ],
+  //   };
+  // };
+
   const getPieChartData = () => {
     const aggregatedMoods: { [key: string]: number } = {};
-
+  console.log(moodData)
     moodData.forEach((entry) => {
+      console.log("Processing date:", entry.date, "with moods:", entry.moods);
       Object.entries(entry.moods).forEach(([mood, count]) => {
         aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
       });
     });
-
+  
+    console.log("Aggregated Mood Data:", aggregatedMoods);
+  
     return {
       labels: Object.keys(aggregatedMoods),
       datasets: [
@@ -148,6 +171,7 @@ export default function MoodStatisticsPage() {
       ],
     };
   };
+  
 
   const pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
@@ -160,6 +184,7 @@ export default function MoodStatisticsPage() {
         callbacks: {
           label: (tooltipItem: TooltipItem<'pie'>) => {
             const total = tooltipItem.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
+            console.log(tooltipItem)
             const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(2);
             return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
           },
