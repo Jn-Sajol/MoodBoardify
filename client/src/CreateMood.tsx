@@ -29,18 +29,14 @@ const CreateMood = () => {
   const [_, setUserId] = useState<number | null>(null);
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // New loading state
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
-
-    console.log("Stored User:", storedUser);
-    console.log("Stored Token:", storedToken);
 
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      console.log("Parsed User ID:", parsedUser.id);
       setUserId(parsedUser.id);
     }
   }, []);
@@ -63,6 +59,7 @@ const CreateMood = () => {
     setUserId(parsedUser.id);
     setError(null);
     setResponse(null);
+    setLoading(true); // Start loading
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/mood/createmood`, {
@@ -88,6 +85,8 @@ const CreateMood = () => {
       } else {
         setError("An unknown error occurred");
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -96,10 +95,18 @@ const CreateMood = () => {
       <h2 className="text-2xl font-bold -mt-12 sm:text-xl md:text-3xl lg:text-4xl text-center">
         How's your mood today? 😊 <br />
       </h2>
-      <p className=" text-gray-600 -mt-6 mb-3.5 sm:text-base md:text-xl lg:text-2xl text-center">
+      <p className="text-gray-600 -mt-6 mb-3.5 sm:text-base md:text-xl lg:text-2xl text-center">
         Pick a mood that matches how you're feeling, and we'll suggest the
         perfect song, movie, or activity to lift your spirits! 🎶🎬✨
       </p>
+
+        {/* Loading Spinner */}
+        {loading && (
+        <div className="flex items-center justify-center mt-4">
+          <div className="w-6 h-6 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+          <span className="ml-2 text-blue-500 font-semibold">Processing...</span>
+        </div>
+      )}
 
       {/* Mood Cards */}
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -107,7 +114,10 @@ const CreateMood = () => {
           <button
             key={name}
             onClick={() => handleMoodClick(name)}
-            className="cursor-pointer flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 border rounded-lg shadow-md bg-gradient-to-r from-teal-800 to-teal-600 hover:bg-gray-100 transition-all transform hover:scale-105 duration-300 p-2 text-white"
+            disabled={loading} // Disable button while loading
+            className={`cursor-pointer flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 border rounded-lg shadow-md bg-gradient-to-r from-teal-800 to-teal-600 transition-all transform ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+            } duration-300 p-2 text-white`}
           >
             <span className="text-4xl md:text-5xl lg:text-6xl">{emoji}</span>
             <span className="text-sm font-semibold mt-4">{name}</span>

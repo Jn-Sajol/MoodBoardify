@@ -151,15 +151,15 @@ export default function MoodStatisticsPage() {
 
   const getPieChartData = () => {
     const aggregatedMoods: { [key: string]: number } = {};
-  console.log(moodData)
+  // console.log(moodData)
     moodData.forEach((entry) => {
-      console.log("Processing date:", entry.date, "with moods:", entry.moods);
+      // console.log("Processing date:", entry.date, "with moods:", entry.moods);
       Object.entries(entry.moods).forEach(([mood, count]) => {
         aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
       });
     });
   
-    console.log("Aggregated Mood Data:", aggregatedMoods);
+    // console.log("Aggregated Mood Data:", aggregatedMoods);
   
     return {
       labels: Object.keys(aggregatedMoods),
@@ -215,8 +215,8 @@ export default function MoodStatisticsPage() {
           <button
             key={d}
             onClick={() => setDays(d)}
-            className={`px-4 py-2 border rounded-lg ${
-              days === d ? "bg-teal-700 text-white" : "bg-white"
+            className={`px-4 py-2 border rounded-lg cursor-pointer  ${
+              days === d ? "bg-teal-700 text-white hover:from-blue-400 hover:to-blue-900" : "bg-white"
             }`}
           >
             Last {d} Days
