@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { FiMenu, FiX } from "react-icons/fi"; // Icons for mobile menu
+import { FiMenu, FiX } from "react-icons/fi";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login state
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
-    // Only redirect if the user is on a protected route
+
+    // Update the login state
+    setIsLoggedIn(!!token);
+
+    // Redirect to login if accessing protected routes without a token
     const protectedRoutes = ["/moods", "/statistic", "/recommendation"];
     if (!token && protectedRoutes.includes(window.location.pathname)) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("auth");
+    setIsLoggedIn(false); // Update login state
+    navigate("/login");
+  };
+
+  const handleLogin = () => {
     navigate("/login");
   };
 
@@ -43,7 +52,7 @@ const NavBar = () => {
             {isMenuOpen ? <FiX /> : <FiMenu />}
           </button>
 
-          {/* Nav Links - Responsive */}
+          {/* Nav Links */}
           <div
             className={`absolute md:static top-20 left-0 w-full md:w-auto md:flex bg-teal-800 md:bg-transparent md:space-x-8 transition-all duration-300 ease-in ${
               isMenuOpen ? "block p-4" : "hidden"
@@ -61,12 +70,23 @@ const NavBar = () => {
             >
               Mood Statistics
             </NavLink>
-            <button
-              className="block md:inline-block text-lg font-semibold bg-teal-700 hover:text-teal-200 p-2 rounded-lg cursor-pointer"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+
+            {/* Conditionally show Login or Logout button */}
+            {isLoggedIn ? (
+              <button
+                className="block md:inline-block text-lg font-semibold bg-teal-700 hover:text-teal-200 p-2 rounded-lg cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                className="block md:inline-block text-lg font-semibold bg-teal-700 hover:text-teal-200 p-2 rounded-lg cursor-pointer"
+                onClick={handleLogin}
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </nav>
