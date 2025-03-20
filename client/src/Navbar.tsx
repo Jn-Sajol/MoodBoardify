@@ -40,6 +40,7 @@ const NavBar = () => {
             className="text-2xl font-bold"
             style={{ fontFamily: "Bebas Neue, cursive" }}
             to="/"
+            onClick={() => setIsMenuOpen(false)} // Close menu when clicking logo
           >
             MoodBoardiFy
           </NavLink>
@@ -61,12 +62,14 @@ const NavBar = () => {
             <NavLink
               className="block md:inline-block text-lg font-semibold hover:text-teal-200 p-2"
               to="/moods"
+              onClick={() => setIsMenuOpen(false)} // Close menu on link click
             >
               Create Mood
             </NavLink>
             <NavLink
               className="block md:inline-block text-lg font-semibold hover:text-teal-200 p-2"
               to="/statistic"
+              onClick={() => setIsMenuOpen(false)} // Close menu on link click
             >
               Mood Statistics
             </NavLink>
@@ -75,14 +78,20 @@ const NavBar = () => {
             {isLoggedIn ? (
               <button
                 className="block md:inline-block text-lg font-semibold bg-teal-700 hover:text-teal-200 p-2 rounded-lg cursor-pointer"
-                onClick={handleLogout}
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false); // Close menu after logout
+                }}
               >
                 Logout
               </button>
             ) : (
               <button
                 className="block md:inline-block text-lg font-semibold bg-teal-700 hover:text-teal-200 p-2 rounded-lg cursor-pointer"
-                onClick={handleLogin}
+                onClick={() => {
+                  handleLogin();
+                  setIsMenuOpen(false); // Close menu after login
+                }}
               >
                 Login
               </button>
