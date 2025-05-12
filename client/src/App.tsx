@@ -8,6 +8,7 @@ import NavBar from "./Navbar";
 import Recommendation from "./Recommendation";
 import MoodStatisticsPage from "./Statistics";
 import ProtectedRoute from "./ProtectedRoute";
+import FeedPage from "./feed";
 function App() {
   return (
     <>
@@ -20,6 +21,7 @@ function App() {
             <Route path="/moods" element={<CreateMood />} />
             <Route path="/recommendation" element={<Recommendation />} />
             <Route path="/statistic" element={<MoodStatisticsPage />} />
+            <Route path="/feed" element={<FeedPage />} />
           </Route>
         </Route>
       </Routes>

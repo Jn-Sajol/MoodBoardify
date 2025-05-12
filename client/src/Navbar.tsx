@@ -73,6 +73,13 @@ const NavBar = () => {
             >
               Mood Statistics
             </NavLink>
+            <NavLink
+              className="block md:inline-block text-lg font-semibold hover:text-teal-200 p-2"
+              to="/feed"
+              onClick={() => setIsMenuOpen(false)} // Close menu on link click
+            >
+              Social Feed
+            </NavLink>
 
             {/* Conditionally show Login or Logout button */}
             {isLoggedIn ? (
