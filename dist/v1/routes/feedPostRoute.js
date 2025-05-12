@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const authMiddleware_1 = require("../../middleware/authMiddleware");
-const feedPostController_1 = require("src/controllers/feedPostController");
+const feedPostController_1 = require("../../controllers/feedPostController");
 const feedPostRouter = express_1.default.Router();
 feedPostRouter.post('/postfeed', authMiddleware_1.userAuth, feedPostController_1.createPost);
 feedPostRouter.get('/getfeeds', feedPostController_1.getAllPublicPosts);
