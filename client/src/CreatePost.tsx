@@ -75,7 +75,7 @@ const CreatePost = () => {
           className={`p-2 rounded-md font-semibold text-sm bg-gradient-to-r from-teal-800 to-teal-600 text-white hover:from-blue-400 hover:to-blue-900 cursor-pointer ${
             loading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+              : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-blue-400 hover:to-blue-900 cursor-pointer"
           }`}
           disabled={loading}
         >

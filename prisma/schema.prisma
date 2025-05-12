@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -33,33 +33,50 @@ enum Moods {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String         @unique
+  email     String    @unique
   password  String
   moods     Mood[]
-  createdAt DateTime       @default(now())
+  posts     Post[]
+  comments  Comment[]
+  notes     Note[]
+  createdAt DateTime  @default(now())
 }
 
 model Mood {
-  id        Int   @id @default(autoincrement())
-  userId    Int  
+  id        Int      @id @default(autoincrement())
+  userId    Int
   mood      Moods
   timestamp DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }
 
-// model Recommendation {
-//   id        String   @id @default(uuid())
-//   mood      Mood     @unique
-//   content   String
-//   createdAt DateTime @default(now())
-// }
+model Post {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  mood      Moods
+  message   String
+  isPublic  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
 
-// model Moodboard {
-//   id        String   @id @default(uuid())
-//   userId    String
-//   title     String
-//   createdAt DateTime @default(now())
-//   user      User     @relation(fields: [userId], references: [id])
-// }
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}

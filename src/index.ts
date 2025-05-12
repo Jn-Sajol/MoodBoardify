@@ -4,6 +4,7 @@ import userRouter from "./v1/routes/userRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import moodRouter from "./v1/routes/moodRoutes";
 import recommendationRouter from "./v1/routes/recommendationRoutes";
+import feedPostRouter from "./v1/routes/feedPostRoute";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/mood", moodRouter);
 app.use("/api/v1/mood", recommendationRouter);
+app.use("/api/v1/feed", feedPostRouter);
 
 //Error Handler
 app.use(errorHandler);
