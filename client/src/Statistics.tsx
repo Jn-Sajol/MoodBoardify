@@ -32,13 +32,12 @@ interface MoodData {
   moods: { [key: string]: number };
 }
 
-
 export default function MoodStatisticsPage() {
   const [moodData, setMoodData] = useState<MoodData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [days, setDays] = useState(7);
-  // console.log(moodData)
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -67,7 +66,7 @@ export default function MoodStatisticsPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setMoodData(data); // Store full array of mood data
+        setMoodData(data);
         setLoading(false);
       })
       .catch(() => {
@@ -76,10 +75,36 @@ export default function MoodStatisticsPage() {
       });
   }, [days]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[300px]">
+        <svg
+          className="animate-spin h-6 w-6 mr-3 text-teal-700"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8z"
+          ></path>
+        </svg>
+        <span className="text-lg font-medium">Loading mood data...</span>
+      </div>
+    );
+  }
+
   if (error) return <div>{error}</div>;
 
-  // Generate colors for moods
   const getMoodColor = (mood: string) => {
     const moodColors: { [key: string]: string } = {
       HAPPY: "#FFD700",
@@ -107,18 +132,17 @@ export default function MoodStatisticsPage() {
     return moodColors[mood] || "#CCCCCC";
   };
 
-  // Process Line Chart Data (Fixing Multi-Day Processing)
   const getLineChartData = () => {
     if (moodData.length === 0) return null;
 
-    const labels = moodData.map((entry) => entry.date); // X-axis = Dates
+    const labels = moodData.map((entry) => entry.date);
     const moodNames = Array.from(
       new Set(moodData.flatMap((entry) => Object.keys(entry.moods)))
     );
 
     const datasets = moodNames.map((mood) => ({
       label: mood,
-      data: moodData.map((entry) => entry.moods[mood] || 0), // Ensure missing values are filled with 0
+      data: moodData.map((entry) => entry.moods[mood] || 0),
       borderColor: getMoodColor(mood),
       backgroundColor: getMoodColor(mood),
       tension: 0.1,
@@ -128,39 +152,15 @@ export default function MoodStatisticsPage() {
     return { labels, datasets };
   };
 
-  // Process Pie Chart Data (Fix: Aggregate Across All Days)
-  // const getPieChartData = () => {
-  //   const aggregatedMoods: { [key: string]: number } = {};
-  
-  //   moodData.forEach((entry) => {
-  //     Object.entries(entry.moods).forEach(([mood, count]) => {
-  //       aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
-  //     });
-  //   });
-
-  //   return {
-  //     labels: Object.keys(aggregatedMoods),
-  //     datasets: [
-  //       {
-  //         data: Object.values(aggregatedMoods),
-  //         backgroundColor: Object.keys(aggregatedMoods).map(getMoodColor),
-  //       },
-  //     ],
-  //   };
-  // };
-
   const getPieChartData = () => {
     const aggregatedMoods: { [key: string]: number } = {};
-  // console.log(moodData)
+
     moodData.forEach((entry) => {
-      // console.log("Processing date:", entry.date, "with moods:", entry.moods);
       Object.entries(entry.moods).forEach(([mood, count]) => {
         aggregatedMoods[mood] = (aggregatedMoods[mood] || 0) + count;
       });
     });
-  
-    // console.log("Aggregated Mood Data:", aggregatedMoods);
-  
+
     return {
       labels: Object.keys(aggregatedMoods),
       datasets: [
@@ -171,9 +171,8 @@ export default function MoodStatisticsPage() {
       ],
     };
   };
-  
 
-  const pieChartOptions: ChartOptions<'pie'> = {
+  const pieChartOptions: ChartOptions<"pie"> = {
     responsive: true,
     plugins: {
       title: {
@@ -182,9 +181,11 @@ export default function MoodStatisticsPage() {
       },
       tooltip: {
         callbacks: {
-          label: (tooltipItem: TooltipItem<'pie'>) => {
-            const total = tooltipItem.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
-            console.log(tooltipItem)
+          label: (tooltipItem: TooltipItem<"pie">) => {
+            const total = tooltipItem.dataset.data.reduce(
+              (acc: number, val: number) => acc + val,
+              0
+            );
             const percentage = ((tooltipItem.raw as number / total) * 100).toFixed(2);
             return `${tooltipItem.label}: ${tooltipItem.raw} (${percentage}%)`;
           },
@@ -194,13 +195,16 @@ export default function MoodStatisticsPage() {
         display: true,
         color: "white",
         formatter: (value: number, ctx: any) => {
-          const total = ctx.dataset.data.reduce((acc: number, val: number) => acc + val, 0);
+          const total = ctx.dataset.data.reduce(
+            (acc: number, val: number) => acc + val,
+            0
+          );
           const percentage = ((value / total) * 100).toFixed(2);
           return `${percentage}%`;
         },
         font: {
-          weight: 'bold' as const,
-          size: 12
+          weight: "bold" as const,
+          size: 12,
         },
       },
     },
@@ -214,12 +218,17 @@ export default function MoodStatisticsPage() {
         {[1, 3, 5, 7, 30].map((d) => (
           <button
             key={d}
-            onClick={() => setDays(d)}
-            className={`px-4 py-2 border rounded-lg cursor-pointer  ${
-              days === d ? "bg-teal-700 text-white hover:from-blue-400 hover:to-blue-900" : "bg-white"
+            onClick={() => {
+              setLoading(true);
+              setDays(d);
+            }}
+            className={`px-4 py-2 border rounded-lg cursor-pointer ${
+              days === d
+                ? "bg-teal-700 text-white hover:from-blue-400 hover:to-blue-900"
+                : "bg-white"
             }`}
           >
-            Last {d} Days
+            Last {d} Day{d > 1 ? "s" : ""}
           </button>
         ))}
       </div>
@@ -245,7 +254,7 @@ export default function MoodStatisticsPage() {
 
           <div className="bg-white p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">
-              Mood Distribution (Last {days} Days)
+              Mood Distribution (Last {days} Day{days > 1 ? "s" : ""})
             </h3>
             <Pie data={getPieChartData()} options={pieChartOptions} />
           </div>
