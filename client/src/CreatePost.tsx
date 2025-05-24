@@ -92,7 +92,24 @@
 // src/components/CreatePost.tsx
 import { useState } from "react";
 
-const moods = ["HAPPY", "SAD", "EXCITED", "ANGRY", "NEUTRAL"];
+const moods = [
+  "HAPPY",
+  "SAD",
+  "EXCITED",
+  "ANGRY",
+  "NEUTRAL",
+  "GRATEFUL",
+  "ANXIOUS",
+  "MOTIVATED",
+  "TIRED",
+  "OPTIMISTIC",
+  "LONELY",
+  "PRODUCTIVE",
+  "FRUSTRATED",
+  "PEACEFUL",
+  "HOPEFUL"
+];
+
 
 const CreatePost = ({ setPosts }: { setPosts: React.Dispatch<React.SetStateAction<any[]>> }) => {
   const [mood, setMood] = useState("");
