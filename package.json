@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "tsnd --respawn -r tsconfig-paths/register --pretty --transpile-only src/index.ts",
-    "build": "tsc && tsc-alias",
-    "start": "nodemon ./dist/index.js",
-    "postinstall": "prisma generate"
-  },
+ "scripts": {
+  "dev": "tsnd --respawn -r tsconfig-paths/register --pretty --transpile-only src/index.ts",
+  "build": "tsc && tsc-alias",
+  "start": "node dist/index.js",
+  "postinstall": "prisma generate"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
